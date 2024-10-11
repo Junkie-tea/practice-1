@@ -2,15 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductModel;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use App\Models\Product;
+
 class ProductController extends Controller
 {
-    public function show(): View
+    public function show(): View{
+        $product = DB::table("products")->get();
+        return view('ProductPage', ['products' => $product]);
+    }
+
+    public function productById($id)
     {
-        return view('ProductPage', [
-            'products' => ProductModel::orderBy('name')->get()
-        ]);
+        // Находим продукт по его ID
+        $product = Product::findOrFail($id);
+        return view('show', compact('product'));
     }
 }
